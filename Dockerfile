@@ -3,5 +3,7 @@ FROM vllm/vllm-openai:${BASE_TAG}
 
 # Qwen3.5 requires bleeding-edge transformers (model_type "qwen3_5" / "qwen3_5_text"
 # is not recognized by the transformers version bundled in the stock vLLM image).
-RUN pip install --no-cache-dir \
-    "transformers @ git+https://github.com/huggingface/transformers.git@f2ba019"
+RUN apt-get update && apt-get install -y --no-install-recommends git && \
+    pip install --no-cache-dir \
+    "transformers @ git+https://github.com/huggingface/transformers.git@f2ba019" && \
+    apt-get purge -y git && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
